@@ -95,3 +95,24 @@ export interface ApiResponse<T> {
     data?: T;
     errors?: Record<string, string[]>;
 }
+
+export interface DashboardStats {
+    admin: {
+        total_users: number;
+        total_tarif: number;
+        total_area_parkir: number;
+        total_kendaraan: number;
+    };
+    petugas: {
+        kendaraan_masuk_today: number;
+        kendaraan_keluar_today: number;
+        parkir_aktif: number;
+        pendapatan_today: number;
+    };
+    owner: {
+        total_pendapatan: number;
+        transaksi_bulan_ini: number;
+        rata_rata_per_hari: number;
+        area_terpadat: string;
+    };
+}

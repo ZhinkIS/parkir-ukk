@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Lock, User, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/ui/Toast';
 import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
 
 export function Login() {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ export function Login() {
     const from =
         (location.state as { from?: Location })?.from?.pathname || '/dashboard';
 
-    // Lock body scroll while on login page
+    // Prevent body scroll on login page
     useEffect(() => {
         const originalStyle = window.document.body.style.overflow;
         const originalHeight = window.document.body.style.height;
@@ -83,54 +84,43 @@ export function Login() {
         }
     };
 
-    // High-quality parked cars & motorcycles image from Unsplash
-    const parkingImage =
-        'https://images.unsplash.com/photo-1506520958913-5b20165e268a?w=1200&q=80';
-
     return (
         <div className="relative flex h-screen w-full overflow-hidden">
-            {/* LEFT SIDE - Parking Image (Dominant 70% on desktop) */}
+            {/* LEFT SIDE - Parking Background (65%) - Using img tag for reliable rendering */}
             <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="relative hidden lg:block lg:w-[70%]"
+                className="relative hidden lg:block lg:w-[65%]"
                 aria-hidden="true"
             >
-                <div className="absolute inset-0">
-                    <img
-                        src={parkingImage}
-                        alt=""
-                        className="h-full w-full object-cover"
-                        loading="eager"
-                    />
-                    {/* Subtle gradient overlay for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900/30 via-transparent to-transparent" />
-                </div>
+                <img
+                    src="/images/parkir-background.jpg"
+                    alt="Parking Background"
+                    className="h-full w-full object-cover"
+                />
             </motion.div>
 
-            {/* MOBILE BACKGROUND IMAGE - Full screen, behind everything */}
+            {/* MOBILE BACKGROUND - Full screen, behind everything */}
             <div className="fixed inset-0 -z-10 lg:hidden" aria-hidden="true">
-                <img
-                    src={parkingImage}
-                    alt=""
-                    className="h-full w-full object-cover"
-                    loading="eager"
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: 'url(/images/bg-parkir.jpg)' }}
                 />
-                {/* Heavy dark overlay + blur effect */}
+                {/* Heavy dark overlay for mobile readability */}
                 <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" />
             </div>
 
-            {/* RIGHT SIDE - Form Container (30% on desktop) */}
+            {/* RIGHT SIDE - Form Container (35%) - Centered vertically */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.25 }}
-                className="relative flex w-full items-center justify-center p-6 lg:w-[30%] lg:px-10"
+                className="relative flex h-full flex-col items-center justify-center bg-white px-8 lg:w-[35%]"
             >
                 <div className="w-full max-w-md">
-                    {/* Logo/Title */}
-                    <div className="mb-10 text-center lg:text-left">
+                    {/* Logo/Title - Centered horizontally */}
+                    <div className="mb-8 flex flex-col items-center text-center">
                         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
                             ParkirPro
                         </h1>
@@ -139,14 +129,14 @@ export function Login() {
                         </p>
                     </div>
 
-                    {/* White Card Container - Clean & Minimal */}
-                    <div className="rounded-[40px] bg-white p-8 shadow-xl ring-1 ring-slate-200 lg:shadow-2xl">
+                    {/* Form Card - Smooth rounded corners, softer shadow */}
+                    <div className="rounded-[32px] border border-gray-100 bg-white p-8 shadow-lg">
                         <form
                             onSubmit={handleSubmit}
                             className="space-y-6"
                             noValidate
                         >
-                            {/* Username Field */}
+                            {/* Username Field - with SVG icon inside */}
                             <div>
                                 <label
                                     htmlFor="username"
@@ -155,11 +145,21 @@ export function Login() {
                                     Username
                                 </label>
                                 <div className="relative">
-                                    <User
-                                        className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400"
+                                    <svg
+                                        className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                         aria-hidden="true"
-                                    />
-                                    <input
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                        />
+                                    </svg>
+                                    <Input
                                         id="username"
                                         type="text"
                                         value={username}
@@ -174,7 +174,7 @@ export function Login() {
                                         placeholder="Masukkan username"
                                         autoComplete="username"
                                         disabled={isLoading || authLoading}
-                                        className={`h-12 w-full rounded-xl border bg-white pr-4 pl-12 text-slate-900 transition-all duration-200 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 ${errors.username ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : 'border-slate-200 hover:border-slate-300'} `}
+                                        className={`h-12 w-full rounded-xl border bg-white pr-4 pl-10 text-slate-900 transition-all duration-200 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 ${errors.username ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : 'border-slate-200 hover:border-slate-300'} `}
                                         aria-invalid={
                                             errors.username ? 'true' : 'false'
                                         }
@@ -196,7 +196,7 @@ export function Login() {
                                 )}
                             </div>
 
-                            {/* Password Field */}
+                            {/* Password Field - with SVG icon inside */}
                             <div>
                                 <label
                                     htmlFor="password"
@@ -205,11 +205,21 @@ export function Login() {
                                     Password
                                 </label>
                                 <div className="relative">
-                                    <Lock
-                                        className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400"
+                                    <svg
+                                        className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                         aria-hidden="true"
-                                    />
-                                    <input
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                        />
+                                    </svg>
+                                    <Input
                                         id="password"
                                         type={
                                             showPassword ? 'text' : 'password'
@@ -226,7 +236,7 @@ export function Login() {
                                         placeholder="Masukkan password"
                                         autoComplete="current-password"
                                         disabled={isLoading || authLoading}
-                                        className={`h-12 w-full rounded-xl border bg-white pr-14 pl-12 text-slate-900 transition-all duration-200 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 ${errors.password ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : 'border-slate-200 hover:border-slate-300'} `}
+                                        className={`h-12 w-full rounded-xl border bg-white pr-12 pl-10 text-slate-900 transition-all duration-200 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 ${errors.password ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : 'border-slate-200 hover:border-slate-300'} `}
                                         aria-invalid={
                                             errors.password ? 'true' : 'false'
                                         }
@@ -241,7 +251,7 @@ export function Login() {
                                         onClick={() =>
                                             setShowPassword(!showPassword)
                                         }
-                                        className="absolute top-1/2 right-4 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+                                        className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
                                         aria-label={
                                             showPassword
                                                 ? 'Sembunyikan password'
@@ -274,22 +284,10 @@ export function Login() {
                                 size="lg"
                                 loading={isLoading || authLoading}
                             >
-                                {isLoading || authLoading ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                        Memproses...
-                                    </>
-                                ) : (
-                                    'Masuk'
-                                )}
+                                Masuk
                             </Button>
                         </form>
                     </div>
-
-                    {/* Footer note - Updated */}
-                    <p className="mt-6 text-center text-xs text-slate-400">
-                        Website ini dibuat oleh Muh.Mufli Khalid Lapa
-                    </p>
                 </div>
             </motion.div>
         </div>

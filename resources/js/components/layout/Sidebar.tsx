@@ -17,7 +17,12 @@ import { cn } from '../../lib/utils';
 
 const navigation = {
     admin: [
-        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+        {
+            name: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutDashboard,
+            exact: true,
+        },
         { name: 'Manajemen User', href: '/dashboard/users', icon: Users },
         { name: 'Tarif Parkir', href: '/dashboard/tarif', icon: Tag },
         { name: 'Area Parkir', href: '/dashboard/areas', icon: Building2 },
@@ -25,7 +30,12 @@ const navigation = {
         { name: 'Log Aktivitas', href: '/dashboard/logs', icon: ListChecks },
     ],
     petugas: [
-        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+        {
+            name: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutDashboard,
+            exact: true,
+        },
         { name: 'Kendaraan Masuk', href: '/dashboard/masuk', icon: Car },
         { name: 'Kendaraan Keluar', href: '/dashboard/keluar', icon: Car },
         { name: 'Cetak Struk', href: '/dashboard/struk', icon: ReceiptText },
@@ -36,7 +46,12 @@ const navigation = {
         },
     ],
     owner: [
-        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+        {
+            name: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutDashboard,
+            exact: true,
+        },
         {
             name: 'Laporan Transaksi',
             href: '/dashboard/reports',
@@ -81,19 +96,20 @@ export function Sidebar() {
                 aria-label="Main navigation"
             >
                 {navItems.map((item) => {
-                    const isActive =
-                        location.pathname === item.href ||
-                        (item.href !== '/dashboard' &&
-                            location.pathname.startsWith(item.href));
+                    // Compute isActive correctly: exact match for Dashboard, prefix match for others
+                    const isActive = item.exact
+                        ? location.pathname === item.href
+                        : location.pathname.startsWith(item.href);
 
                     return (
                         <NavLink
                             key={item.name}
                             to={item.href}
-                            className={({ isActive: active }) =>
+                            end={item.exact}
+                            className={({ isActive: navActive }) =>
                                 cn(
                                     'flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200',
-                                    active
+                                    navActive || isActive
                                         ? 'bg-blue-50 text-blue-600'
                                         : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
                                 )

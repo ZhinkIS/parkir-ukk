@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AreaParkirController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\KendaraanController;
 use App\Http\Controllers\Api\LogAktivitasController;
 use App\Http\Controllers\Api\TarifController;
@@ -14,6 +15,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
 
     Route::middleware('role:petugas,admin,owner')->group(function () {
         Route::get('transaksi', [TransaksiController::class, 'index']);

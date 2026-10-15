@@ -7,6 +7,7 @@ import type {
     Kendaraan,
     Transaksi,
     LogAktivitas,
+    DashboardStats,
     PaginatedResponse,
     ApiResponse,
     LoginResponse,
@@ -146,4 +147,11 @@ export const userApi = {
     ) => api.put<{ data: User }>(`/users/${id}`, data).then(handleResponse),
     delete: (id: number) =>
         api.delete<ApiResponse<null>>(`/users/${id}`).then(handleResponse),
+};
+
+export const dashboardApi = {
+    getStats: () =>
+        api
+            .get<{ success: boolean; data: DashboardStats }>('/dashboard/stats')
+            .then(handleResponse),
 };
